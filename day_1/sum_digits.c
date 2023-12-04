@@ -10,12 +10,12 @@ int extract_digits(char *line);
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
-        printf("Usage: ./sum_digits <input_file_name>\n"); // TODO: Add a make file for easily building the executable
+        printf("Usage: ./sum_digits <input_file_name>\n");
         exit(EXIT_FAILURE);
     }
 
     int sum_of_digits_in_file = find_sum(argv[1]);
-    printf("The sum of all the first and last digits in the file is %i\n", sum_of_digits_in_file);
+    printf("The sum of all the first and last digits from each line in the file is %i\n", sum_of_digits_in_file);
 
     return EXIT_SUCCESS;
 }
