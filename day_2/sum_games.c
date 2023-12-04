@@ -51,12 +51,8 @@ int find_game_sum(char *input_file) {
     int sum = 0;
 
     while((fgets(buf, MAX_LINE, file_ptr)) != NULL) {
-        if (game_is_valid(buf)) {
-            // printf("Game %lu is possible\n", game_num);
-            sum += game_num;
-        }
+        if (game_is_valid(buf)) sum += game_num;
         game_num++;
-        // break;
     }
 
     return sum;
@@ -66,6 +62,7 @@ bool game_is_valid(char *input_file_line) {
     size_t current_offset = 0;
     size_t line_length = strlen(input_file_line);
 
+    // advance offset past the game number
     for (; current_offset < line_length; current_offset++) {
         if (input_file_line[current_offset] == ':') {
             break;
@@ -80,30 +77,28 @@ bool game_is_valid(char *input_file_line) {
         int digit_offset = 0;
         int color_offset = 0;
 
-       for (; current_offset < line_length && (input_file_line[current_offset] != ',' && input_file_line[current_offset] != ';'); current_offset++) {
+        // loop until you meet a ',' or a ';'.
+        // That is, we are treating each cube color at a time
+        for (; current_offset < line_length && (input_file_line[current_offset] != ',' && input_file_line[current_offset] != ';'); current_offset++) {
             if (isspace(input_file_line[current_offset])) continue;
-            else if (isdigit(input_file_line[current_offset])) {
+            else if (isdigit(input_file_line[current_offset]))
                 digit[digit_offset++] = input_file_line[current_offset];
-            } else {
+            else
                 color[color_offset++] = input_file_line[current_offset];
-            }
         }
 
         current_offset++; // advance past the ',' or ';'
 
-        color[color_offset] = '\0';
+        color[color_offset] = '\0'; // add string terminating null character
 
-        int num = digit_offset == 1 ? digit[0] - '0' : atoi(digit);
-
-        // printf("color is %s, number is %i\n", color, num);
+        int num = digit_offset == 1 ? digit[0] - '0' : atoi(digit); // digit can be 1 or two characters. Could be more, but our configuration is two character, so nothing else matters
 
         if (strcmp("red", color) == 0) {
             if (CONFIGURATION.red < num) return false;
         } else if (strcmp("blue", color) == 0) {
             if (CONFIGURATION.blue < num) return false;
-        } else {
+        } else
             if (CONFIGURATION.green < num) return false;
-        }
     }
 
     return true;
