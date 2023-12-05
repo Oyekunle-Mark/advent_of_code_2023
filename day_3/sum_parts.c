@@ -19,6 +19,9 @@ int main(int argc, char *argv[]) {
 
     char schematic[SQUARE_MATRIX_SIZE][SQUARE_MATRIX_SIZE];
     build_schematic(argv[1], schematic);
+    int result = part_sum(schematic);
+
+    printf("The sum of the parts numbers in the schematic is %i\n", result);
 
     return EXIT_SUCCESS;
 }
