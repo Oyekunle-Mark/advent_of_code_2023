@@ -5,7 +5,7 @@
 #include <string.h>
 
 #define MAX_LINE_LENGTH 1000
-#define SQUARE_MATRIX_SIZE 140
+#define SQUARE_MATRIX_SIZE 10
 
 bool is_symbol(char c);
 void build_schematic(char *input_file_name, char schematic[SQUARE_MATRIX_SIZE][SQUARE_MATRIX_SIZE]);
@@ -19,6 +19,18 @@ int main(int argc, char *argv[]) {
 
     char schematic[SQUARE_MATRIX_SIZE][SQUARE_MATRIX_SIZE];
     build_schematic(argv[1], schematic);
+
+    // int i,j,row,col;
+
+    for (int i = 0; i < SQUARE_MATRIX_SIZE; i++) {
+        for (int j = 0; j < SQUARE_MATRIX_SIZE; j++) {
+            // schematic[i][j] = '.';
+            printf("%c ", schematic[i][j]);
+        }
+        printf("\n");
+    }
+
+
     int result = part_sum(schematic);
 
     printf("The sum of the parts numbers in the schematic is %i\n", result);
@@ -54,14 +66,15 @@ void build_schematic(char *input_file_name, char schematic[SQUARE_MATRIX_SIZE][S
 int part_sum(char schematic[SQUARE_MATRIX_SIZE][SQUARE_MATRIX_SIZE]) {
     int sum = 0;
 
-    for (size_t row = 0; row < SQUARE_MATRIX_SIZE; row++) {
+    for (int row = 0; row < SQUARE_MATRIX_SIZE; row++) {
         int digit_index = 0;
-        char current_parts_number[3];
+        char current_parts_number[4];
         bool is_adjacent_to_a_symbol = false;
 
-        for (size_t col = 0; col < SQUARE_MATRIX_SIZE; col++) {
+        for (int col = 0; col < SQUARE_MATRIX_SIZE; col++) {
             if (isdigit(schematic[row][col])) {
                 current_parts_number[digit_index++] = schematic[row][col];
+                printf("current part number is %c\n", schematic[row][col]);
 
                 // we want to check in all adjacent direction for a symbol. We conditionally  only set is_adjacent_to_a_symbol
                 // to true only if is_symbol returns true to prevent overwriting a previous check with false
@@ -87,15 +100,26 @@ int part_sum(char schematic[SQUARE_MATRIX_SIZE][SQUARE_MATRIX_SIZE]) {
                 }
             } else {
                 if (digit_index > 0 && is_adjacent_to_a_symbol) {
-                    if (digit_index == 3)
-                        sum += atoi(current_parts_number);
-                    else if (digit_index == 2) {
-                        char temp[2] = {current_parts_number[0], current_parts_number[1]};
-                        sum += atoi(temp);
+                    int previous_num = -1;
+
+                    if (digit_index == 3) {
+                        // char temp[3] = {current_parts_number[0], current_parts_number[1], current_parts_number[2]};
+                        current_parts_number[3] = '\0';
+                        previous_num = atoi(current_parts_number);
                     }
-                    else
-                        sum += (current_parts_number[0] - '0');
+                    else if (digit_index == 2) {
+                        char temp[3] = {current_parts_number[0], current_parts_number[1], '\0'};
+                        previous_num = atoi(temp);
+                    }
+                    else if (digit_index == 1)
+                        previous_num = (current_parts_number[0] - '0');
+                    // else
+                    //     printf("digit index is %i\n", digit_index);
+
+                    printf("digit index is %i, previous num is %i\n", digit_index, previous_num);
+                    sum += previous_num;
                 }
+
                 digit_index = 0;
                 is_adjacent_to_a_symbol = false;
             }
