@@ -20,19 +20,7 @@ int main(int argc, char *argv[]) {
     char schematic[SQUARE_MATRIX_SIZE][SQUARE_MATRIX_SIZE];
     build_schematic(argv[1], schematic);
 
-    // int i,j,row,col;
-
-    // for (int i = 0; i < SQUARE_MATRIX_SIZE; i++) {
-    //     for (int j = 0; j < SQUARE_MATRIX_SIZE; j++) {
-    //         // schematic[i][j] = '.';
-    //         printf("%c ", schematic[i][j]);
-    //     }
-    //     printf("\n");
-    // }
-
-
     int result = part_sum(schematic);
-
     printf("The sum of the parts numbers in the schematic is %i\n", result);
 
     return EXIT_SUCCESS;
@@ -58,9 +46,6 @@ void build_schematic(char *input_file_name, char schematic[SQUARE_MATRIX_SIZE][S
     while((fgets(buf, MAX_LINE_LENGTH, file_ptr)) != NULL) {
         strcpy(schematic[index++], buf);
     }
-
-    // printf("Schematic has length %lu\n", index);
-    // printf("line 1 is %c\n", schematic[139][141]);
 }
 
 int part_sum(char schematic[SQUARE_MATRIX_SIZE][SQUARE_MATRIX_SIZE]) {
@@ -98,6 +83,29 @@ int part_sum(char schematic[SQUARE_MATRIX_SIZE][SQUARE_MATRIX_SIZE]) {
                     is_adjacent_to_a_symbol = is_symbol(schematic[row][col + 1]) ? true : is_adjacent_to_a_symbol; // right
                 }
             } else {
+                if (digit_index > 0 && is_adjacent_to_a_symbol) {
+                    int previous_num = -1;
+
+                    if (digit_index == 3) {
+                        current_parts_number[3] = '\0';
+                        previous_num = atoi(current_parts_number);
+                    }
+                    else if (digit_index == 2) {
+                        char temp[3] = {current_parts_number[0], current_parts_number[1], '\0'};
+                        previous_num = atoi(temp);
+                    }
+                    else if (digit_index == 1)
+                        previous_num = (current_parts_number[0] - '0');
+
+                    printf("previous num is %i in (%i,%i)\n", previous_num, row, col);
+                    sum += previous_num;
+                }
+
+                digit_index = 0;
+                is_adjacent_to_a_symbol = false;
+            }
+
+            if (col == SQUARE_MATRIX_SIZE - 1) { // if at the end of the row. An edge case, just copying the else block from above to this block
                 if (digit_index > 0 && is_adjacent_to_a_symbol) {
                     int previous_num = -1;
 
