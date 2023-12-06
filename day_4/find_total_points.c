@@ -12,7 +12,7 @@
 
 int find_total_points(char *input_file);
 int find_card_points(char *input_file_line);
-void build_winning_numbers(char * winning_numbers_line, int line_len, int *winning_numbers);
+void build_winning_numbers(char * winning_numbers_line, int start_index, int end_index, int *winning_numbers);
 bool arr_contains(int *numbers, int num, int num_of_ele);
 
 
@@ -40,7 +40,8 @@ int find_total_points(char *input_file) {
     int sum = 0;
 
     while((fgets(buf, MAX_LINE, file_ptr)) != NULL) {
-        printf("%s", buf);
+        // printf("%s", buf);
+        find_card_points(buf);
     }
 
     return sum;
@@ -54,19 +55,19 @@ bool arr_contains(int *numbers, int num, int num_of_ele) {
     return false;
 }
 
-void build_winning_numbers(char *winning_numbers_line, int line_len, int *winning_numbers) {
+void build_winning_numbers(char *winning_numbers_line, int start_index, int end_pos, int *winning_numbers) {
     char digit[2];
     int digit_offset = 0;
     int w_n_offset = 0;
 
-    for (int i = 0; i < line_len; i++) {
-        if (isspace(winning_numbers_line[i]) || i == line_len - 1) {
+    for (int i = start_index; i < end_pos; i++) {
+        if (isspace(winning_numbers_line[i]) || i == end_pos - 1) {
             if (digit_offset > 0) {
                 winning_numbers[w_n_offset++] = digit_offset == 1 ? digit[0] - '0' : atoi(digit);
                 digit_offset = 0;
             }
         } else {
-            digit[digit_offset++] = winning_numbers[i];
+            digit[digit_offset++] = winning_numbers_line[i];
         }
     }
 
@@ -77,48 +78,38 @@ void build_winning_numbers(char *winning_numbers_line, int line_len, int *winnin
     // }
 }
 
-// int find_card_points(char *input_file_line) {
-//     size_t current_offset = 0;
-//     size_t line_length = strlen(input_file_line);
+int find_card_points(char *input_file_line) {
+    size_t current_offset = 0;
+    size_t line_length = strlen(input_file_line);
 
-//     // advance offset past the game number
-//     for (; current_offset < line_length; current_offset++) {
-//         if (input_file_line[current_offset] == ':') {
-//             break;
-//         }
-//     }
+    // advance offset past the card number infomation up to ':'
+    for (; current_offset < line_length; current_offset++) {
+        if (input_file_line[current_offset] == ':') {
+            break;
+        }
+    }
+    current_offset++; // advance past the ':'
 
-//     current_offset++; // advance past the ':'
+    // find '|'
+    for (; current_offset < line_length; current_offset++) {
+        if (input_file_line[current_offset] == '|') {
+            break;
+        }
+    }
 
-//     for (; current_offset < line_length;) {
-//         char digit[2];
-//         char color[6];
-//         int digit_offset = 0;
-//         int color_offset = 0;
+    int winning_numbers[WINNING_NUMBERS_SIZE];
+    build_winning_numbers(input_file_line, 0, current_offset, winning_numbers);
 
-//         // loop until you meet a ',' or a ';'.
-//         // That is, we are treating each cube color at a time
-//         for (; current_offset < line_length && (input_file_line[current_offset] != ',' && input_file_line[current_offset] != ';'); current_offset++) {
-//             if (isspace(input_file_line[current_offset])) continue;
-//             else if (isdigit(input_file_line[current_offset]))
-//                 digit[digit_offset++] = input_file_line[current_offset];
-//             else
-//                 color[color_offset++] = input_file_line[current_offset];
-//         }
+    int predictions[PREDICTED_NUMBERS_SIZE];
+    build_winning_numbers(input_file_line, current_offset + 1, line_length, predictions);
 
-//         current_offset++; // advance past the ',' or ';'
+    printf("winning number");
+    for (int i = 0; i < WINNING_NUMBERS_SIZE; i++)
+        printf("%i ", winning_numbers[i]);
 
-//         color[color_offset] = '\0'; // add string terminating null character
+    printf("predictions");
+    for (int i = 0; i < PREDICTED_NUMBERS_SIZE; i++)
+        printf("%i ", predictions[i]);
 
-//         int num = digit_offset == 1 ? digit[0] - '0' : atoi(digit); // digit can be 1 or two characters. Could be more, but our configuration is two character, so nothing else matters
-
-//         if (strcmp("red", color) == 0) {
-//             if (CONFIGURATION.red < num) return false;
-//         } else if (strcmp("blue", color) == 0) {
-//             if (CONFIGURATION.blue < num) return false;
-//         } else
-//             if (CONFIGURATION.green < num) return false;
-//     }
-
-//     return true;
-// }
+    return true;
+}
