@@ -100,7 +100,7 @@ int find_card_points(char *input_file_line) {
     int result = 0;
 
     for (size_t i = 0; i < PREDICTED_NUMBERS_SIZE; i++) {
-        if (arr_contains(winning_numbers, predictions[i], WINNING_NUMBERS_SIZE)) {
+        if (arr_contains(winning_numbers, predictions[i], WINNING_NUMBERS_SIZE)) { // FIXME: shamelessly do this in a array. Inefficient, but faster than writing a hashtable
             result = result > 0 ? result * 2 : 1;
         }
     }
