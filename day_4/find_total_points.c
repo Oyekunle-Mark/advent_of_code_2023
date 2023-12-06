@@ -6,8 +6,8 @@
 
 
 #define MAX_LINE 1000
-#define WINNING_NUMBERS_SIZE 5
-#define PREDICTED_NUMBERS_SIZE 8
+#define WINNING_NUMBERS_SIZE 10
+#define PREDICTED_NUMBERS_SIZE 25
 
 
 int find_total_points(char *input_file);
@@ -40,8 +40,7 @@ int find_total_points(char *input_file) {
     int sum = 0;
 
     while((fgets(buf, MAX_LINE, file_ptr)) != NULL) {
-        // printf("%s", buf);
-        find_card_points(buf);
+        sum += find_card_points(buf);
     }
 
     return sum;
@@ -56,7 +55,8 @@ bool arr_contains(int *numbers, int num, int num_of_ele) {
 }
 
 void build_winning_numbers(char *winning_numbers_line, int start_index, int end_pos, int *winning_numbers) {
-    char digit[2];
+    char digit[3];
+    digit[2] = '\0';
     int digit_offset = 0;
     int w_n_offset = 0;
 
@@ -70,12 +70,6 @@ void build_winning_numbers(char *winning_numbers_line, int start_index, int end_
             digit[digit_offset++] = winning_numbers_line[i];
         }
     }
-
-    // // reap the last number, if it isn't followed by a space
-    // if (digit_offset > 0) {
-    //     winning_numbers[w_n_offset++] = digit_offset == 1 ? digit[0] - '0' : atoi(digit);
-    //     digit_offset = 0;
-    // }
 }
 
 int find_card_points(char *input_file_line) {
@@ -88,7 +82,7 @@ int find_card_points(char *input_file_line) {
             break;
         }
     }
-    current_offset++; // advance past the ':'
+    int winning_numbers_start = ++current_offset; // advance past the ':' and assign start of winning numbers
 
     // find '|'
     for (; current_offset < line_length; current_offset++) {
@@ -98,18 +92,18 @@ int find_card_points(char *input_file_line) {
     }
 
     int winning_numbers[WINNING_NUMBERS_SIZE];
-    build_winning_numbers(input_file_line, 0, current_offset, winning_numbers);
+    build_winning_numbers(input_file_line, winning_numbers_start, current_offset, winning_numbers);
 
     int predictions[PREDICTED_NUMBERS_SIZE];
     build_winning_numbers(input_file_line, current_offset + 1, line_length, predictions);
 
-    printf("winning number");
-    for (int i = 0; i < WINNING_NUMBERS_SIZE; i++)
-        printf("%i ", winning_numbers[i]);
+    int result = 0;
 
-    printf("predictions");
-    for (int i = 0; i < PREDICTED_NUMBERS_SIZE; i++)
-        printf("%i ", predictions[i]);
+    for (size_t i = 0; i < PREDICTED_NUMBERS_SIZE; i++) {
+        if (arr_contains(winning_numbers, predictions[i], WINNING_NUMBERS_SIZE)) {
+            result = result > 0 ? result * 2 : 1;
+        }
+    }
 
-    return true;
+    return result;
 }
