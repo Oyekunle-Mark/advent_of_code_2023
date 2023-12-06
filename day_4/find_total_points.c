@@ -12,7 +12,7 @@
 
 int find_total_points(char *input_file);
 int find_card_points(char *input_file_line);
-int build_winning_numbers(char * winning_numbers_line, int *winning_numbers);
+void build_winning_numbers(char * winning_numbers_line, int line_len, int *winning_numbers);
 bool arr_contains(int *numbers, int num, int num_of_ele);
 
 
@@ -44,6 +44,37 @@ int find_total_points(char *input_file) {
     }
 
     return sum;
+}
+
+bool arr_contains(int *numbers, int num, int num_of_ele) {
+    for (int i = 0; i < num_of_ele; i++)
+        if (numbers[i] == num)
+            return true;
+
+    return false;
+}
+
+void build_winning_numbers(char *winning_numbers_line, int line_len, int *winning_numbers) {
+    char digit[2];
+    int digit_offset = 0;
+    int w_n_offset = 0;
+
+    for (int i = 0; i < line_len; i++) {
+        if (isspace(winning_numbers_line[i]) || i == line_len - 1) {
+            if (digit_offset > 0) {
+                winning_numbers[w_n_offset++] = digit_offset == 1 ? digit[0] - '0' : atoi(digit);
+                digit_offset = 0;
+            }
+        } else {
+            digit[digit_offset++] = winning_numbers[i];
+        }
+    }
+
+    // // reap the last number, if it isn't followed by a space
+    // if (digit_offset > 0) {
+    //     winning_numbers[w_n_offset++] = digit_offset == 1 ? digit[0] - '0' : atoi(digit);
+    //     digit_offset = 0;
+    // }
 }
 
 // int find_card_points(char *input_file_line) {
