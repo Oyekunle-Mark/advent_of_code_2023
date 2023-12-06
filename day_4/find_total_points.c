@@ -56,7 +56,7 @@ bool arr_contains(int *numbers, int num, int num_of_ele) {
 
 void build_winning_numbers(char *winning_numbers_line, int start_index, int end_pos, int *winning_numbers) {
     char digit[3];
-    digit[2] = '\0';
+    digit[2] = '\0'; // insert string terminating null character
     int digit_offset = 0;
     int w_n_offset = 0;
 
