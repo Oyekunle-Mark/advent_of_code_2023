@@ -43,6 +43,8 @@ int find_total_points(char *input_file) {
         sum += find_card_points(buf);
     }
 
+    fclose(file_ptr);
+
     return sum;
 }
 
