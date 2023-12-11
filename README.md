@@ -1,2 +1,3 @@
-# advent_of_code_2023
-Advent of Code Challenge - 2023
+# subterranean_warm_ups
+
+A collection of small c programs to better grasp the language
