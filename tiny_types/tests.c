@@ -10,12 +10,15 @@ int init_suite(void) { return 0; }
 int clean_suite(void) { return 0; }
 
 /************* Test case functions ****************/
-void test_vector_initialization(void)
+void test_vector_initialization_and_free(void)
 {
 	struct vector vec = build();
 
 	CU_ASSERT_EQUAL(vec.length, 0);
 	CU_ASSERT_EQUAL(vec.capacity, DEFAULT_SIZE);
+
+	drop(&vec);
+	CU_ASSERT_EQUAL(vec.capacity, 0);
 }
 
 /************* Test Runner Code goes here **************/
@@ -37,7 +40,7 @@ int main(void)
 	}
 
 	/* add the tests to the suite */
-	if ((NULL == CU_add_test(pSuite, "test_vector_initialization", test_vector_initialization)))
+	if ((NULL == CU_add_test(pSuite, "test_vector_initialization_and_free", test_vector_initialization_and_free)))
 	{
 		CU_cleanup_registry();
 		return CU_get_error();

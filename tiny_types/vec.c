@@ -20,6 +20,8 @@ size_t capacity(struct vector* vec) {
 
 void drop(struct vector* vec) {
 	free(vec->items);
+	vec->length = 0;
+	vec->capacity = 0;
 }
 
 int get(struct vector* vec, size_t pos) {
