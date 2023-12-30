@@ -1,6 +1,6 @@
 #pragma once
 
-#define DEFAULT_SIZE 16
+#define DEFAULT_SIZE 5 // using an unusually lower number for testing purposes
 
 struct vector {
 	int length;

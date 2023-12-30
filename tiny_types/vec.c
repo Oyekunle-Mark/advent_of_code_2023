@@ -29,11 +29,11 @@ int get(struct vector* vec, size_t pos) {
 }
 
 int put(struct vector* vec, int item) {
-	if (vec->length == vec->capacity) { 
+	if (vec->length == vec->capacity) {
 		vec->items = (int*) realloc(vec->items, vec->capacity * 2);
 		vec->capacity *= 2;
 	}
 
 	vec->items[vec->length++] = item;
 	return 0; // better to return maybe a negative value when put fails(maybe incases where the vector couldn't be expanded successfully in a call to realloc
-}	
+}

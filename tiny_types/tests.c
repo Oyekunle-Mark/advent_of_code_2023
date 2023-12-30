@@ -21,8 +21,45 @@ void test_vector_initialization_and_free(void)
 	CU_ASSERT_EQUAL(vec.capacity, 0);
 }
 
-/************* Test Runner Code goes here **************/
+void test_len_and_capacity(void)
+{
+	struct vector vec = build();
 
+	put(&vec, 1);
+	put(&vec, 2);
+	put(&vec, 3);
+
+	CU_ASSERT_EQUAL(vec.length, 3);
+	CU_ASSERT_EQUAL(vec.capacity, DEFAULT_SIZE);
+
+	put(&vec, 4);
+	put(&vec, 5);
+	CU_ASSERT_EQUAL(vec.length, 5);
+
+	put(&vec, 6);
+	CU_ASSERT_EQUAL(vec.length, 6);
+	CU_ASSERT_EQUAL(vec.capacity, DEFAULT_SIZE * 2);
+
+	drop(&vec);
+}
+
+void test_get_and_put(void)
+{
+	struct vector vec = build();
+
+	put(&vec, 1);
+	put(&vec, -1);
+	put(&vec, 32102);
+
+	CU_ASSERT_EQUAL(get(&vec, 0), 1);
+	CU_ASSERT_EQUAL(get(&vec, 1), -1);
+	CU_ASSERT_EQUAL(get(&vec, 2), 32102);
+
+	drop(&vec);
+}
+
+
+/************* Test Runner Code goes here **************/
 int main(void)
 {
 	CU_pSuite pSuite = NULL;
@@ -40,7 +77,9 @@ int main(void)
 	}
 
 	/* add the tests to the suite */
-	if ((NULL == CU_add_test(pSuite, "test_vector_initialization_and_free", test_vector_initialization_and_free)))
+	if ((NULL == CU_add_test(pSuite, "test_vector_initialization_and_free", test_vector_initialization_and_free)) ||
+			(NULL == CU_add_test(pSuite, "test_len_and_capacity", test_len_and_capacity)) ||
+			(NULL == CU_add_test(pSuite, "test_get_and_put", test_get_and_put)))
 	{
 		CU_cleanup_registry();
 		return CU_get_error();
