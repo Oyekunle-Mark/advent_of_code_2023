@@ -1,4 +1,6 @@
+#include <stdlib.h>
 #include <stdio.h>
+
 #include "vec.h"
 
 struct vector build() {
