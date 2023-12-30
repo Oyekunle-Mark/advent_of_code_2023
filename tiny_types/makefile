@@ -8,9 +8,12 @@ tests: $(objects) tests.c vec.h
 
 vec.o: vec.h
 
-.PHONY: clean run_tests
+.PHONY: clean run_tests mem_check
 clean:
 	rm tests $(objects)
 
 run_tests:
 	./tests
+
+mem_check:
+	valgrind ./tests
