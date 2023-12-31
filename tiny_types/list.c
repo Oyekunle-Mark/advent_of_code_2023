@@ -55,7 +55,7 @@ void get_from_list(struct Node* head, char* key, int* value)
 
 	while(curr) {
 		if (strcmp(curr->key, key)) {
-			value = &(curr->value);
+			*value = curr->value;
 			return;
 		}
 
