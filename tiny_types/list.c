@@ -26,6 +26,8 @@ void add_to_tail(struct Node* head, char* key, int value)
 
 void remove_from_list(struct Node* head, char* key)
 {
+	if (head == NULL) return;
+
 	if (strcmp(head->key, key)) {
 		head = head->next;
 		return;
@@ -66,6 +68,8 @@ void get_from_list(struct Node* head, char* key, int* value)
 
 void free_list(struct Node* head)
 {
+	if (head == NULL) return;
+
 	struct Node* next = head->next;
 	free(head);
 

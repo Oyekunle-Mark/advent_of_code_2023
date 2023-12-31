@@ -3,6 +3,7 @@
 #include "CUnit/CUnit.h"
 #include "CUnit/Basic.h"
 #include "vec.h"
+#include "list.h"
 
 /* Test Suite setup and cleanup functions: */
 
@@ -57,7 +58,6 @@ void test_get_and_put(void)
 
 	drop(&vec);
 }
-
 
 /************* Test Runner Code goes here **************/
 int main(void)
