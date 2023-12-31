@@ -40,7 +40,7 @@ void remove_from_list(struct Node* head, char* key)
 			break;
 		}
 
-		prev = curr;		
+		prev = curr;
 		curr = curr->next;
 	}
 
