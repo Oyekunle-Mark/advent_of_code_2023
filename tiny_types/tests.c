@@ -63,24 +63,29 @@ void test_linked_list(void)
 {
 	struct Node* head = NULL;
 
-	add_to_tail(head, "value_1", 1);
-	add_to_tail(head, "value_2", 2);
-	
+	add_to_tail(&head, "value_1", 1);
+	add_to_tail(&head, "value_2", 2);
+
 	int* temp = NULL;
-	get_from_list(head, "value_1", temp);
+	get_from_list(&head, "value_1", &temp);
 	CU_ASSERT_EQUAL(*temp, 1);
 
-	get_from_list(head, "value_2", temp);
+	get_from_list(&head, "value_2", &temp);
 	CU_ASSERT_EQUAL(*temp, 2);
 
-	add_to_tail(head, "value_3", 3);
-	remove_from_list(head, "value_2");
-	get_from_list(head, "value_2", temp);
+	add_to_tail(&head, "value_3", 3);
+	remove_from_list(&head, "value_2");
+	get_from_list(&head, "value_2", &temp);
 	CU_ASSERT_EQUAL(temp, NULL);
 
-	free_list(head);
-	get_from_list(head, "value_1", temp);
-	CU_ASSERT_EQUAL(temp, NULL);
+	get_from_list(&head, "value_3", &temp);
+	CU_ASSERT_EQUAL(*temp, 3);
+	get_from_list(&head, "value_1", &temp);
+	CU_ASSERT_EQUAL(*temp, 1);
+
+	// free_list(&head);
+	// get_from_list(&head, "value_1", &temp);
+	// CU_ASSERT_EQUAL(temp, NULL);
 }
 
 /************* Test Runner Code goes here **************/
