@@ -62,4 +62,16 @@ void get_from_list(struct Node* head, char* key, int* value)
 
 	value = NULL;
 	return;
-}	
+}
+
+void free_list(struct Node* head)
+{
+	struct Node* next = head->next;
+	free(head);
+
+	while(next) {
+		struct Node* prev = next;
+		next = next->next;
+		free(prev);
+	}
+}
