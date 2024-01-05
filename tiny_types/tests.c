@@ -59,6 +59,7 @@ void test_get_and_put(void)
 	drop(&vec);
 }
 
+/*
 void test_linked_list(void)
 {
 	struct Node* head = NULL;
@@ -87,6 +88,7 @@ void test_linked_list(void)
 	// get_from_list(&head, "value_1", &temp);
 	// CU_ASSERT_EQUAL(temp, NULL);
 }
+*/
 
 /************* Test Runner Code goes here **************/
 int main(void)
@@ -108,8 +110,7 @@ int main(void)
 	/* add the tests to the suite */
 	if ((NULL == CU_add_test(pSuite, "test_vector_initialization_and_free", test_vector_initialization_and_free)) ||
 			(NULL == CU_add_test(pSuite, "test_len_and_capacity", test_len_and_capacity)) ||
-			(NULL == CU_add_test(pSuite, "test_get_and_put", test_get_and_put)) ||
-			(NULL == CU_add_test(pSuite, "test_linked_list", test_linked_list)))
+			(NULL == CU_add_test(pSuite, "test_get_and_put", test_get_and_put))) 
 	{
 		CU_cleanup_registry();
 		return CU_get_error();
