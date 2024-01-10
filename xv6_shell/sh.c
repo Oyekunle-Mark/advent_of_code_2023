@@ -61,15 +61,21 @@ runcmd(struct cmd *cmd)
     if(ecmd->argv[0] == 0)
       exit(0);
 	execv(ecmd->argv[0], ecmd->argv);
-	fprintf(stderr, "execv failed");
+	fprintf(stderr, "execv %s failed\n", ecmd->argv[0]);
     break;
 
   case '>':
   case '<':
     rcmd = (struct redircmd*)cmd;
-    fprintf(stderr, "redir not implemented\n");
-    // Your code here ...
-    runcmd(rcmd->cmd);
+    if (close(rcmd->fd) == -1) {
+		fprintf(stderr, "close %d failed\n", rcmd->fd);
+		exit(1);
+	}
+	if (open(rcmd->file, rcmd->mode, 0644) == -1) {
+		fprintf(stderr, "open %s failed\n", rcmd->file);
+		exit(1);
+	}
+	runcmd(rcmd->cmd);
     break;
 
   case '|':
@@ -84,7 +90,6 @@ runcmd(struct cmd *cmd)
 int
 getcmd(char *buf, int nbuf)
 {
-  
   if (isatty(fileno(stdin)))
     fprintf(stdout, "6.828$ ");
   memset(buf, 0, nbuf);
